@@ -97,8 +97,16 @@ textarea {
    Author's custom styles
    ========================================================================== */
 
+.jumbotron .h1 {
+    font-size: 4.5rem;
+    font-weight: 300;
+    line-height: 1.1;
+}
 
-
+.timeIndexList{
+    max-height: 30em;
+    overflow-y:scroll;
+}
 
 
 
