@@ -11,10 +11,10 @@ namespace Autism_Video_API.Models
         public DateTime StartTime { get; set; }
         public DateTime EndTime { get; set; }
         public string FileName { get; set; }
-    }
-
-    public void PathfinderVideo(string PatientID, DateTime StartTime, DateTime EndTime, string FileName) 
-    {
-        //ToDo: Persist the meta data about video
+    
+        public PathfinderVideo(string PatientID, DateTime StartTime, DateTime EndTime, string FileName) 
+        {
+            //ToDo: Persist the meta data about video
+        }
     }
 }

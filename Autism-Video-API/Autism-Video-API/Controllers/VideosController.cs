@@ -17,16 +17,17 @@ namespace Autism_Video_API.Controllers
         }
 
         // GET api/values/5
-        public IEnumerable<PathfinderVideo> Get(int patientId, string startTime, string endTime)
+        public IEnumerable<PathfinderVideo> Get(string patientId, DateTime startTime, DateTime endTime)
         {
-            return new PathfinderVideos(patientId, startTime, endTime);
+            var pv = new PathfinderVideos(patientId, startTime, endTime);
+
+            return pv.Videos;
         }
 
         // POST api/values
-        public void Post([FromBody]string patientId, [FromBody]string startTime, [FromBody]string endTime, [FromBody]string fileName)
+        public void Post([FromBody]string patientId, [FromBody]DateTime startTime, [FromBody]DateTime endTime, [FromBody]string fileName)
         {
-            PathfinderVideo pfVideo = new PathfinderVideo();
-            pfVideo.AddVideoToPathfinderVideo(patientID, startTime, endTime, fileName);
+            var pf = new PathfinderVideo(patientId, startTime, endTime, fileName);
         }
     }
 }

@@ -16,7 +16,7 @@ namespace Autism_Video_API.Models
 
         public void Save()
         {
-            throw new Exception("Not Implemented");
+            var ee = new EventEntity(PatientID, TimeStamp.ToString("yyyyMMddHHmmss"), Skill, Target, Result, Comments);
         }
     }
 }
