@@ -8,13 +8,21 @@ namespace Autism_Video_API.Models
     public class PathfinderVideo
     {
         public string PatientID { get; set; }
-        public DateTime StartTime { get; set; }
-        public DateTime EndTime { get; set; }
+        public string StartTime { get; set; }
+        public string EndTime { get; set; }
         public string FileName { get; set; }
     
-        public PathfinderVideo(string PatientID, DateTime StartTime, DateTime EndTime, string FileName) 
+        public PathfinderVideo(string patientID, string startTime, string endTime, string fileName) 
         {
-            //ToDo: Persist the meta data about video
+            this.PatientID = patientID;
+            this.StartTime = startTime;
+            this.EndTime = endTime;
+            this.FileName = fileName;
+        }
+
+        public void Save()
+        {
+            var ve = new VideoEntity(PatientID, StartTime, EndTime, FileName);
         }
     }
 }

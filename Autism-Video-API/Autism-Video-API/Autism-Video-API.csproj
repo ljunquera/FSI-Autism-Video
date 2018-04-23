@@ -222,6 +222,7 @@
     <Compile Include="Models\PathFinderEvents.cs" />
     <Compile Include="Models\PathfinderVideo.cs" />
     <Compile Include="Models\PathfinderVideos.cs" />
+    <Compile Include="Models\VideoEntity.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
