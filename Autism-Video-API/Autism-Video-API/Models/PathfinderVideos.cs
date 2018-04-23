@@ -14,10 +14,7 @@ namespace Autism_Video_API.Models
         public PathfinderVideos (string PatientID, DateTime StartTime, DateTime EndTime)
         {
             videos = new List<PathfinderVideo>();
-            
             //TODO: go get videos
-
-
         }
     }
 }
