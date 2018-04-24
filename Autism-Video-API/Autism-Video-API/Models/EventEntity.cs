@@ -23,9 +23,8 @@ namespace Autism_Video_API.Models
         {
         }
 
-        public EventEntity(string partitionKey, string rowKey, string skill, string target, string result, string comments)
+        public EventEntity(string partitionKey, string rowKey, string skill, string target, string result, string comments, string StorageConnectionString)
         {
-            string StorageConnectionString = "DefaultEndpointsProtocol=https;AccountName=fsiautismteam2;AccountKey=q0mp6PvwFuMY3pp5BESwHgCEFWCMDt8tZIBHL9i5N0n3XmjqrvXDI28U1W7XNGjcX3xmiuSdjO7VQHuNsv9Ofg==;TableEndpoint=https://fsiautismteam2.table.cosmosdb.azure.com:443/;";
             string TableName = "Events";
             base.PartitionKey = partitionKey;
             base.RowKey = rowKey;

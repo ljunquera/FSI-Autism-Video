@@ -19,9 +19,8 @@ namespace Autism_Video_API.Models
 
         }
 
-        public VideoEntity(string partitionKey, string rowKey, string endTime, string fileName)
+        public VideoEntity(string partitionKey, string rowKey, string endTime, string fileName, string StorageConnectionString)
         {
-            string StorageConnectionString = "DefaultEndpointsProtocol=https;AccountName=fsiautismteam2;AccountKey=q0mp6PvwFuMY3pp5BESwHgCEFWCMDt8tZIBHL9i5N0n3XmjqrvXDI28U1W7XNGjcX3xmiuSdjO7VQHuNsv9Ofg==;TableEndpoint=https://fsiautismteam2.table.cosmosdb.azure.com:443/;";
             string TableName = "Videos";
             base.PartitionKey = partitionKey;
             base.RowKey = rowKey;

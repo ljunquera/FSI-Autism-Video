@@ -20,9 +20,9 @@ namespace Autism_Video_API.Models
             this.FileName = fileName;
         }
 
-        public void Save()
+        public void Save(string StorageConnectionString)
         {
-            var ve = new VideoEntity(PatientID, StartTime, EndTime, FileName);
+            var ve = new VideoEntity(PatientID, StartTime, EndTime, FileName, StorageConnectionString);
         }
     }
 }

@@ -19,9 +19,8 @@ namespace Autism_Video_API.Models
             }
         }
 
-        private void ExecuteQuery(TableQuery<EventEntity> query)
+        private void ExecuteQuery(TableQuery<EventEntity> query, string StorageConnectionString)
         {
-            string StorageConnectionString = "DefaultEndpointsProtocol=https;AccountName=fsiautismteam2;AccountKey=q0mp6PvwFuMY3pp5BESwHgCEFWCMDt8tZIBHL9i5N0n3XmjqrvXDI28U1W7XNGjcX3xmiuSdjO7VQHuNsv9Ofg==;TableEndpoint=https://fsiautismteam2.table.cosmosdb.azure.com:443/;";
             string TableName = "Events";
             // Retrieve the storage account from the connection string.
             CloudStorageAccount storageAccount = CloudStorageAccount.Parse(StorageConnectionString);
@@ -43,7 +42,7 @@ namespace Autism_Video_API.Models
             }
         }
 
-        public PathFinderEvents(string PatientID, string StartDate, string EndDate)
+        public PathFinderEvents(string PatientID, string StartDate, string EndDate, string StorageConnectionString)
         {
             events = new List<PathfinderEvent>();
             TableQuery<EventEntity> query = new TableQuery<EventEntity>()
@@ -58,10 +57,10 @@ namespace Autism_Video_API.Models
                     TableQuery.GenerateFilterCondition("RowKey", QueryComparisons.LessThanOrEqual, EndDate)
                 )
             );
-            ExecuteQuery(query);
+            ExecuteQuery(query, StorageConnectionString);
         }
 
-        public PathFinderEvents(string PatientID, string StartDate, string EndDate, string Skill)
+        public PathFinderEvents(string PatientID, string StartDate, string EndDate, string Skill, string StorageConnectionString)
         {
             events = new List<PathfinderEvent>();
             TableQuery<EventEntity> query = new TableQuery<EventEntity>()
@@ -80,10 +79,10 @@ namespace Autism_Video_API.Models
                     ))
                 )
             );
-            ExecuteQuery(query);
+            ExecuteQuery(query, StorageConnectionString);
         }
 
-        public PathFinderEvents(string PatientID, string StartDate, string EndDate, string Skill, string Target)
+        public PathFinderEvents(string PatientID, string StartDate, string EndDate, string Skill, string Target, string StorageConnectionString)
         {
             events = new List<PathfinderEvent>();
             TableQuery<EventEntity> query = new TableQuery<EventEntity>()
@@ -106,7 +105,7 @@ namespace Autism_Video_API.Models
                     TableQuery.GenerateFilterCondition("Target", QueryComparisons.GreaterThanOrEqual, Target)
                 )
             );
-            ExecuteQuery(query);
+            ExecuteQuery(query, StorageConnectionString);
         }
     }
 }

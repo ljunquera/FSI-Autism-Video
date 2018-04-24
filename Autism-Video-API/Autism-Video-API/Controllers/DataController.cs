@@ -5,7 +5,7 @@ using System.Net;
 using System.Net.Http;
 using System.Web.Http;
 using Autism_Video_API.Models;
-
+using System.Configuration;
 
 namespace Autism_Video_API.Controllers
 {
@@ -14,21 +14,21 @@ namespace Autism_Video_API.Controllers
         // GET api/values
         public IEnumerable<PathfinderEvent> Get(string PatientId, string StartDate, string EndDate, string Skill, string Target )
         {
-            if(Skill != null && Target != null)
+            if (Skill != null && Target != null)
             {
-                var pve = new PathFinderEvents(PatientId, StartDate, EndDate, Skill, Target);
+                var pve = new PathFinderEvents(PatientId, StartDate, EndDate, Skill, Target, GetStorConnStr());
                 return pve.Events;
             }
             else
             {
                 if (Skill != null)
                 {
-                    var pve = new PathFinderEvents(PatientId, StartDate, EndDate, Skill);
+                    var pve = new PathFinderEvents(PatientId, StartDate, EndDate, Skill, GetStorConnStr());
                     return pve.Events;
                 }
                 else
                 {
-                    var pve = new PathFinderEvents(PatientId, StartDate, EndDate);
+                    var pve = new PathFinderEvents(PatientId, StartDate, EndDate, GetStorConnStr());
                     return pve.Events;
                 }
             }
@@ -39,7 +39,12 @@ namespace Autism_Video_API.Controllers
         // POST api/values
         public void Post([FromBody]PathfinderEvent pathfinderData)
         {
-            pathfinderData.Save();
+            pathfinderData.Save(GetStorConnStr());
+        }
+
+        private string GetStorConnStr()
+        {
+            return ConfigurationManager.AppSettings["StorageConnectionString"]; 
         }
 
     }
