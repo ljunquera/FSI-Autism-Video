@@ -1,28 +1,28 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 
 namespace Autism_Video_API.Models
 {
     public class PathfinderVideoUI
     {
-        public string FileName { get; set; }
-        public string StartTime { get; set; }
-        public string Token { get; set; }
-        public List<PathfinderEventUI> events;
-        public List<PathfinderEventUI> Events
-        {
-            get
-            {
-                return this.events;
-            }
-        }
+        public string URL { get; set; }
+        public DateTime StartTime { get; set; }
+        public DateTime EndTime { get; set; }
+        public string PatientId { get; set; }
 
-        public PathfinderVideoUI(string fileName, string startTime, string token, List<PathfinderEventUI> events)
+
+        public List<PathfinderEventUI> Events;
+
+       
+
+        public PathfinderVideoUI(PathfinderVideo pv)
         {
-            this.FileName = fileName;
-            this.StartTime = startTime;
-            this.Token = token;
-            this.events = events;
+            this.URL = pv.FileName;
+            this.StartTime = DateTime.ParseExact(pv.StartTime, "yyyyMMddHHmmss", CultureInfo.InvariantCulture);
+            this.EndTime = DateTime.ParseExact(pv.EndTime, "yyyyMMddHHmmss", CultureInfo.InvariantCulture);
+            this.PatientId = pv.PatientID;
+            this.Events = new List<PathfinderEventUI>();
         }
     }
 }

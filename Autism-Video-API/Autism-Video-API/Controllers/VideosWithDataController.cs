@@ -5,37 +5,41 @@ using System.Net;
 using System.Net.Http;
 using System.Web.Http;
 using Autism_Video_API.Models;
+using System.Configuration;
 
 namespace Autism_Video_API.Controllers
 {
     public class VideosWithDataController: ApiController
     {
         // GET api/values/5
-        public IEnumerable<PathfinderVideoUI> Get(string patientId, string startTime, string endTime)
+        public PathfinderVideoUI Get(string patientId, string startTime, string endTime)
         {
             if (patientId != null && startTime != null && endTime != null)
             {
-                VideosController videosController = new VideosController();
-                DataController dataController = new DataController();
-                IEnumerable<PathfinderVideo> pathfinderVideos = videosController.Get(patientId, startTime, endTime);
-                IEnumerable<PathfinderEvent> pathfinderEvents = dataController.Get(patientId, startTime, endTime, null, null);
-                List<PathfinderVideoUI> pathfinderVideosUI = new List<PathfinderVideoUI>();
-                List<PathfinderEventUI> pathfinderEventsUI = new List<PathfinderEventUI>();
-                foreach(var pathfinderVideo in pathfinderVideos)
-                {
-                    string sTime = pathfinderVideo.StartTime;
-                    string eTime = pathfinderVideo.EndTime;
-                    var videoEvents = pathfinderEvents.Where(a => DateTime.Parse(a.TimeStamp) >= DateTime.Parse(sTime) && DateTime.Parse(a.TimeStamp) <= DateTime.Parse(eTime));
-                    foreach (var videoEvent in videoEvents)
+                var pve = new PathfinderVideos(patientId, startTime, endTime, GetStorConnStr());
+
+
+                if (pve == null || pve.Videos.Count == 0)
+                    return null;
+
+
+                PathfinderVideoUI pathfinderVideoUI = new PathfinderVideoUI(pve.Videos[0]);
+
+                var pathfinderEvents = new PathFinderEvents(patientId, pathfinderVideoUI.StartTime.ToString("yyyyMMddHHmmss"), pathfinderVideoUI.EndTime.ToString("yyyyMMddHHmmss"), null, null, GetStorConnStr());
+
+                foreach (var pe in pathfinderEvents.Events)
                     {
-                        pathfinderEventsUI.Add(new PathfinderEventUI(videoEvent.Comments, (DateTime.Parse(videoEvent.TimeStamp) - DateTime.Parse(sTime)).ToString()));
+                    pathfinderVideoUI.Events.Add(new PathfinderEventUI(pe, pathfinderVideoUI.StartTime));
                     }
                     //ToDo: Get the URL and Token for video from Media Services
-                    pathfinderVideosUI.Add(new PathfinderVideoUI(pathfinderVideo.PatientID, pathfinderVideo.StartTime, "", pathfinderEventsUI));
-                }
-                return pathfinderVideosUI;
+                return pathfinderVideoUI;
             }
             throw new Exception("Invalid Query Options");
+        }
+
+        private string GetStorConnStr()
+        {
+            return ConfigurationManager.AppSettings["StorageConnectionString"];
         }
 
     }
