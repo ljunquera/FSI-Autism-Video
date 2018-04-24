@@ -45,9 +45,13 @@ namespace VideoUploader
             // Create operation: Upload a blob with the specified name to the container.
             // If the blob does not exist, it will be created. If it does exist, it will be overwritten.
             blob.UploadFromFile(fileName);
-            
-            //post to AMSingestion api
 
-            }
+            //post to AMSingestion api
+            var response2 = client.PostAsJsonAsync<PathfinderVideo>(
+                "http://fsiautismny2.azurewebsites.net/api/MediaService", pathfinderVideo);
+
+            response2.Result.EnsureSuccessStatusCode();
+
+        }
     }
 }
