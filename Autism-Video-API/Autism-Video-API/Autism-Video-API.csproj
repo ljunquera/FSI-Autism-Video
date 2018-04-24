@@ -211,8 +211,8 @@
     <Compile Include="Areas\HelpPage\SampleGeneration\TextSample.cs" />
     <Compile Include="Areas\HelpPage\XmlDocumentationProvider.cs" />
     <Compile Include="Controllers\DataController.cs" />
-    <Compile Include="Controllers\PathfinderEventUI.cs" />
     <Compile Include="Controllers\VideosController.cs" />
+    <Compile Include="Controllers\VideosWithDataController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
