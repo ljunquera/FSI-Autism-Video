@@ -18,7 +18,7 @@ namespace Autism_Video_API.Models
 
         public PathfinderVideoUI(PathfinderVideo pv)
         {
-            this.URL = pv.FileName;
+            this.URL = pv.MediaServiceUrl;
             this.StartTime = DateTime.ParseExact(pv.StartTime, "yyyyMMddHHmmss", CultureInfo.InvariantCulture);
             this.EndTime = DateTime.ParseExact(pv.EndTime, "yyyyMMddHHmmss", CultureInfo.InvariantCulture);
             this.PatientId = pv.PatientID;

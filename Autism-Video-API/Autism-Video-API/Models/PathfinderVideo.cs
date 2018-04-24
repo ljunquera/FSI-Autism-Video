@@ -13,6 +13,28 @@ namespace Autism_Video_API.Models
         public string PatientID { get; set; }
         public string StartTime { get; set; }
         public string EndTime { get; set; }
+
+        internal void AMSPublish(string storageConnectionString, string blobConnectionString)
+        {
+            //ToDo Connect to blob to generate uri
+            CloudStorageAccount storageAccount = CloudStorageAccount.Parse(ConfigurationManager.AppSettings["BlobConnectionString"]);
+
+            //Create the blob client object.
+            CloudBlobClient blobClient = storageAccount.CreateCloudBlobClient();
+
+            //Get a reference to a container to use for the sample code, and create it if it does not exist.
+            CloudBlobContainer container = blobClient.GetContainerReference("testpublic");
+            container.CreateIfNotExists();
+            
+            //Get a reference to a blob within the container.
+            CloudBlockBlob blob = container.GetBlockBlobReference(this.FileName);
+
+            // Mocking the call to Media Service
+
+            //Update the media service url in database
+            Update(this.PatientID, this.StartTime, blob.Uri.ToString(), storageConnectionString);
+        }
+
         public string FileName { get; set; }
         public string MediaServiceUrl { get; set; }
 
