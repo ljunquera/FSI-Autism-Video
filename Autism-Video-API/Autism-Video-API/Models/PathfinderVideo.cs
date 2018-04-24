@@ -15,13 +15,13 @@ namespace Autism_Video_API.Models
 
         public PathfinderVideo(){ }
 
-        public PathfinderVideo(string patientID, string startTime, string endTime, string fileName) 
+        public PathfinderVideo(string patientID, string startTime, string endTime, string fileName, string mediaServiceUrl) 
         {
             this.PatientID = patientID;
             this.StartTime = startTime;
             this.EndTime = endTime;
             this.FileName = fileName;
-            this.MediaServiceUrl = "";
+            this.MediaServiceUrl = mediaServiceUrl;
         }
 
         public void Save(string StorageConnectionString)
