@@ -104,11 +104,13 @@ video {
 }
 
 .timeIndexList{
-    max-height: 30em;
+    max-height: 25em;
     overflow-y:scroll;
 }
 
-
+.newdataheader {
+    padding-top: 40px;
+}
 
 
 

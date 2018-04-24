@@ -6,20 +6,29 @@ function takemethere(timeIndex) {
 }
 
 
-function PopulateIndex(markerObj) {
+function PopulateIndex() {
     // var objl = document.getElementById('listIndex');
+    markerObj.sort(function (obj1,obj2) {
+        return obj1.time - obj2.time;
+    });
     for (var i = 0; i < markerObj.length; i++) {
         var jobj = markerObj[i];
-        var strl = '<li class="list-group-item"><a href="#" onclick="takemethere(' + jobj['time'] + ')">' + jobj['text'] + '</a></li>';
-        $('#listIndex').append(strl);
-        // objl.appendChild(strl);
+        // var strl = '<li class="list-group-item"><a href="#" onclick="takemethere(' + jobj['time'] + ')">' + jobj['text'] + '</a></li>';
+        addIndex(jobj);
     }
+}
+
+function addIndex(jobj) {
+    var strl = '<li class="list-group-item"><a href="#" id=' + jobj['time'] +
+        ' onclick="takemethere(' + jobj['time'] + ')">' +
+        convertSecsToTimeFormat(jobj['time']) + " - " + jobj['text'] + '</a></li>';
+    $('#listIndex').append(strl);
 }
 
 function populatePatients(patients) {
     for (var i = 0; i < patients.length; i++) {
         var jobj = patients[i];
-        var strl = '<a class="dropdown-item" href="#" onclick="patientSelected(' + jobj['id'] + ',\'' + jobj['name'] + '\')">' + jobj['name'] + '</a>';
+        var strl = '<a class="dropdown-item" href="#" onclick="patientSelected(\'' + jobj['id'] + '\',\'' + jobj['name'] + '\')">' + jobj['name'] + '</a>';
         $('#dropdownOptions').append(strl);
     }
 }
@@ -30,16 +39,21 @@ function patientSelected(pid, pname) {
         name: pname
     };
     $('#dropdownMenuButton').text(pname);
+    $('#patientName').val(pname);
 }
 
 function postData() {
     // get patient id from global
-    var TimeStamp = $('#TimeStamp').val();
-    // TimeStamp += TimeStamp+start time
-    // var
+    // var secs = parseInt($('#TimeStamp').val());
+    var secs = convertTimeFormatToSecs($('#TimeStamp').val());
+    var startTimeUTC = moment.utc(video.StartTime);
+    var markerTime = startTimeUTC.add(secs, 's');
+    console.log(markerTime.format("YYYYMMDDHHmmss"));
+    // var TimeStamp = $('#TimeStamp').val();
+
     var pdata = {
         PatientID: patient.id,
-        TimeStamp: TimeStamp,
+        TimeStamp: markerTime.format("YYYYMMDDHHmmss"),
         Skill: $('#skill').val(),
         Target: $('#target').val(),
         Result: $('#result').val(),
@@ -47,13 +61,21 @@ function postData() {
     };
     $.ajax({
         type: "POST",
-        url: "https://jsonplaceholder.typicode.com/posts",
+        url: "http://fsiautismny2.azurewebsites.net/api/Data",
         data: JSON.stringify(pdata),
         contentType: "application/json; charset=utf-8",
         dataType: "json",
         success: function(p) {
             console.log(p);
-            alert("done");
+            addMarkpoint(secs);
+            markerObj.push({
+                'time': secs,
+                'text': pdata.Skill + " " + pdata.Comments
+            });
+            // markerAry.push(secs);
+            // markerAry.sort();
+            cleanUPIndex();
+            PopulateIndex();
         },
         failure: function(errMsg) {
             alert(errMsg);
@@ -61,27 +83,79 @@ function postData() {
     });
 }
 
+function initializeVideo(videoData) {
+    video = videoData;
+    markerAry = [];
+    markerObj = [];
+    for (var event in video.Events) {
+        var eobg = video.Events[event];
+        markerAry.push(eobg.OffsetSeconds);
+        markerObj.push({
+            'time': eobg.OffsetSeconds,
+            'text': eobg.Skill + " " + eobg.Comments
+        });
+    }
+    markerAry.sort();
+    loadAMP(markerAry, video.URL);
+    PopulateIndex();
+
+    $('#videoPlayback').show();
+    $('#postDataForm').show();
+    $('#postheader').show();
+}
+
+function cleanUPIndex() {
+        $('#listIndex').empty();
+}
+
 function GetVideos() {
-    // verify if patient is selected
-    //
-}
-
-function addMarkpoint() {
-    var pos = playerInstance.currentTime();
-    addMarker(null, pos);
-}
-
-function loadJWPlayer() {
-    playerInstance = jwplayer("myplayer");
-    playerInstance.setup({
-
-
-        file: Testfile,
-        //mediaid: "xxxxYYYY",
+    cleanUPIndex();
+    if (typeof patient == 'undefined') {
+        alert("Select patient");
+        return;
+    }
+    var dates = $('#datr').val().split("-");
+    var startDate = moment(new Date(dates[0].trim())).format("YYYYMMDD") + "000000";
+    var endDate = moment(new Date(dates[1].trim())).format("YYYYMMDD") + "000000";
+    // http://fsiautismny2.azurewebsites.net/api/VideosWithData?patientId=abc123&startTime=20180423000000&endTime=20180424000000
+    $.ajax({
+        type: "GET",
+        url: "http://fsiautismny2.azurewebsites.net/api/VideosWithData",
+        data: {
+            "patientId": patient.id,
+            "startTime": startDate,
+            "endTime": endDate
+        },
+        // contentType: "application/json; charset=utf-8",
+        dataType: "json",
+        success: function(result) {
+            console.log(result);
+            initializeVideo(result);
+        },
+        failure: function(errMsg) {
+            alert(errMsg);
+        }
     });
 }
 
-function loadAMP(aryTimes) {
+function getMarkpoint() {
+    playerInstance.pause();
+    var pos = playerInstance.currentTime();
+    $('#TimeStamp').val(convertSecsToTimeFormat(Math.round(pos)));
+}
+
+function addMarkpoint(secs) {
+
+    addMarker(null, secs);
+}
+
+// function _ampTimeUpdateHandler(strTime) {
+//     //$('#footime').text(strTime);
+//     console.log(playerInstance.currentTime());
+//
+// }
+
+function loadAMP(aryTimes, videoSrc) {
 
     var myOptions = {
         autoplay: true,
@@ -99,19 +173,21 @@ function loadAMP(aryTimes) {
     };
     playerInstance = amp("myplayer", myOptions);
     playerInstance.src([{
-        src: Testfile
+        src: videoSrc
     }]);
+    // playerInstance.addEventListener(amp.eventName.timeupdate, _ampTimeUpdateHandler);
 
 }
 
 $(document).ready(function functionName() {
-    // $('#videoPlayback').hide();
+    $('#videoPlayback').hide();
     $('#postDataForm').hide();
-    $('#selectPatient').hide();
+    $('#postheader').hide();
+    // $('#selectPatient').hide();
     $('input[name="daterange"]').daterangepicker();
 
     populatePatients([{
-        id: "1",
+        id: "abc123",
         name: "Dhishan"
     }, {
         id: "2",
@@ -126,20 +202,20 @@ $(document).ready(function functionName() {
 
 
     // get the marker data
-    var markerObj = [{
-        time: "20",
-        text: "Behaviour 1"
-    }, {
-        time: "25",
-        text: "Behaviour 2"
-    }, {
-        time: "30",
-        text: "Behaviour 3"
-    }];
-    PopulateIndex(markerObj);
-    let ary = new Array();
-    for (marker of markerObj) {
-        ary.push(marker.time);
-    }
-    loadAMP(ary);
+    // var markerObj = [{
+    //     time: "20",
+    //     text: "Behaviour 1"
+    // }, {
+    //     time: "25",
+    //     text: "Behaviour 2"
+    // }, {
+    //     time: "30",
+    //     text: "Behaviour 3"
+    // }];
+    // PopulateIndex(markerObj);
+    // let ary = new Array();
+    // for (marker of markerObj) {
+    //     ary.push(marker.time);
+    // }
+    // loadAMP(ary);
 });
