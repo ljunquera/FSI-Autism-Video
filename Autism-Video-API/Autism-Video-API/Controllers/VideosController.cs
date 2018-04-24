@@ -23,9 +23,9 @@ namespace Autism_Video_API.Controllers
         }
 
         // POST api/values
-        public void Post([FromBody]PathfinderVideo video)
+        public string Post([FromBody]PathfinderVideo video)
         {
-           video.Save(GetStorConnStr());
+           return video.Save(GetStorConnStr());
         }
 
         private string GetStorConnStr()
