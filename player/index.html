@@ -30,10 +30,11 @@
 
     <!-- Add your site or application content here -->
     <div class="container-fluid">
-        <div class="jumbotron">
+        <div class="jumbotron mx-auto">
             <h1>Video Data Collection</h1>
         </div>
         <div class="row" id="selectPatient">
+            <div class="col-sm-1"></div>
             <div class="col-sm-2">
                 <div class="dropdown">
                     <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -43,11 +44,11 @@
                     </div>
                 </div>
             </div>
-            <div class="col-sm-6">
+            <div class="col-sm-5">
                 <div class="form-group row">
-                    <label for="usr" class="col-4 col-form-label">Date Range:</label>
+                    <label for="datr" class="col-4 col-form-label">Date Range:</label>
                     <div class="col-8">
-                        <input type="text" name="daterange" class="form-control" value="01/01/2015 - 01/31/2015" id="usr" />
+                        <input type="text" name="daterange" class="form-control" value="04/23/2018 - 04/25/2018" id="datr" />
                     </div>
                 </div>
             </div>
@@ -62,12 +63,21 @@
     <div class="row" id="videoPlayback">
         <div class="col-sm-1"></div>
         <div class="col-sm-6">
-            <video id="myplayer" class="azuremediaplayer amp-default-skin amp-big-play-centered" tabindex="0" autoplay controls width="640" height="480"></video>
+            <video id="myplayer" class="azuremediaplayer amp-default-skin amp-big-play-centered" tabindex="0" autoplay controls></video>
         </div>
         <div class="col-sm-3">
             <ul class="list-group timeIndexList" id="listIndex"></ul>
         </div>
         <div class="col-sm-1"></div>
+    </div>
+    <div class="row" id="postheader">
+        <div class="col-sm-2">
+            <!-- indentation -->
+        </div>
+        <div class="col-sm-10 newdataheader">
+            <h2>Post New Event Data</h2>
+
+        </div>
     </div>
     <div class="row" id="postDataForm">
         <div class="col-sm-1">
@@ -85,34 +95,34 @@
                 <div class="form-group row">
                     <label for="example-text-input" class="col-2 col-form-label">TimeStamp</label>
                     <div class="col-7">
-                        <input class="form-control" type="text" pattern="([0-9]{2}:)?[0-9]{2}:[0-9]{2}" value="00:45" id="TimeStamp">
+                        <input class="form-control" type="text" value="00:45" id="TimeStamp">
                     </div>
                     <div class="col-3">
-                        <button type="submit" class="btn btn-primary" onclick="addMarkpoint()">Insert Marker</button>
+                        <button type="submit" class="btn btn-primary" onclick="getMarkpoint()">Insert Marker</button>
                     </div>
                 </div>
                 <div class="form-group row">
                     <label for="example-text-input" class="col-2 col-form-label">Skill</label>
                     <div class="col-10">
-                        <input class="form-control" type="text" value="Artisanal kale" id="skill">
+                        <input class="form-control" type="text" value="Skill" id="skill">
                     </div>
                 </div>
                 <div class="form-group row">
                     <label for="example-text-input" class="col-2 col-form-label">Target</label>
                     <div class="col-10">
-                        <input class="form-control" type="text" value="Artisanal kale" id="target">
+                        <input class="form-control" type="text" value="Target" id="target">
                     </div>
                 </div>
                 <div class="form-group row">
                     <label for="example-text-input" class="col-2 col-form-label">Result</label>
                     <div class="col-10">
-                        <input class="form-control" type="text" value="Artisanal kale" id="result">
+                        <input class="form-control" type="text" value="Result" id="result">
                     </div>
                 </div>
                 <div class="form-group row">
                     <label for="example-text-input" class="col-2 col-form-label">Comments</label>
                     <div class="col-10">
-                        <input class="form-control" type="text" value="Artisanal kale" id="comments">
+                        <input class="form-control" type="text" value="Comments" id="comments">
                     </div>
                 </div>
                 <button type="submit" class="btn btn-primary" onclick="postData()">Submit</button>

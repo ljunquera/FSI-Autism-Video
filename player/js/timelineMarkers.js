@@ -109,6 +109,19 @@ function convertTimeFormatToSecs(timeFormat) {
             return 0;
         }
 
+function convertSecsToTimeFormat(nSecs) {
+    hours = Math.floor(nSecs / 3600);
+    mins = Math.floor((nSecs - (hours * 3600)) / 60);
+    secs = nSecs - (hours * 3600) - (mins * 60);
+    str = "";
+    if (hours > 0) {
+        str += hours + ":"
+    }
+    str += ("00" + mins).slice (-2) + ":" + ("00" + secs).slice (-2);
+    return(str)
+}
+
+
 function addMarker(progressControlSlider, marker) {
     if (!progressControlSlider) {
         progressControlSlider = getElementsByClassName("vjs-progress-control", "vjs-slider");
@@ -131,16 +144,3 @@ function clearMarkers() {
         document.getElementsByClassName('amp-timeline-marker')[i].style.visibility = 'hidden';
     }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
