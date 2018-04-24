@@ -25,7 +25,7 @@ namespace Autism_Video_API.Controllers
 
                 PathfinderVideoUI pathfinderVideoUI = new PathfinderVideoUI(pve.Videos[0]);
 
-                var pathfinderEvents = new PathFinderEvents(patientId, startTime, endTime, null, null, GetStorConnStr());
+                var pathfinderEvents = new PathFinderEvents(patientId, pathfinderVideoUI.StartTime.ToString("yyyyMMddHHmmss"), pathfinderVideoUI.EndTime.ToString("yyyyMMddHHmmss"), null, null, GetStorConnStr());
 
                 foreach (var pe in pathfinderEvents.Events)
                     {

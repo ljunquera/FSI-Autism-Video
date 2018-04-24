@@ -13,7 +13,7 @@ namespace Autism_Video_API.Models
 
         public PathfinderEventUI(PathfinderEvent Pe, DateTime VideoStartTime)
         {
-            this.OffsetSeconds = (DateTime.ParseExact(Pe.TimeStamp,"yyyyMMddHHmmss", CultureInfo.InvariantCulture) - VideoStartTime).Seconds;
+            this.OffsetSeconds = (int)(DateTime.ParseExact(Pe.TimeStamp,"yyyyMMddHHmmss", CultureInfo.InvariantCulture) - VideoStartTime).TotalSeconds;
             this.Skill = Pe.Skill;
             this.Target = Pe.Target;
             this.Result = Pe.Result;
