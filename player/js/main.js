@@ -13,8 +13,55 @@ function PopulateIndex(markerObj){
   }
 }
 
+function populatePatients(patients) {
+  for (var i = 0; i < patients.length; i++) {
+    var jobj = patients[i];
+    var strl = '<a class="dropdown-item" href="#" onclick="patientSelected('+jobj['id']+',\''+jobj['name'] +'\')">'+jobj['name']+'</a>';
+    $('#dropdownOptions').append(strl);
+  }
+}
+
+function patientSelected(pid,pname){
+  patient = {id:pid,name:pname};
+  $('#dropdownMenuButton').text(pname);
+}
+
+function postData(){
+  // get patient id from global
+  var TimeStamp=$('#TimeStamp').val();
+  // TimeStamp += TimeStamp+start time
+  // var
+  var pdata = {
+    PatientID:patient.id,TimeStamp:TimeStamp,Skill:$('#skill').val(),Target:$('#target').val(),Result:$('#result').val(),Comments:$('#comments').val()
+  };
+  $.ajax({
+    type: "POST",
+    url: "https://jsonplaceholder.typicode.com/posts",
+    data: JSON.stringify(pdata),
+    contentType: "application/json; charset=utf-8",
+    dataType: "json",
+    success: function(p){
+      console.log(p)
+      alert("done");
+    },
+    failure: function(errMsg) {
+        alert(errMsg);
+    }
+});
+}
+
+function GetVideos() {
+  // verify if patient is selected
+  //
+}
 
 $(document).ready(function functionName() {
+  $('#videoPlayback').hide();
+  // $('#postDataForm').hide();
+  $('input[name="daterange"]').daterangepicker();
+
+  populatePatients([{id:"1",name:"Dhishan"},{id:"2",name:"Siddharth"},{id:"3",name:"amulya"},{id:"4",name:"Lambert"}]);
+
   playerInstance = jwplayer("myplayer");
   playerInstance.setup({
       // file: "https://fsiautismteam2.blob.core.windows.net/testpublic/WIN_20180423_12_55_42_Pro.mp4",
