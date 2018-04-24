@@ -14,13 +14,17 @@ namespace Autism_Video_API.Models
         public string StartTime { get; set; }
         public string EndTime { get; set; }
         public string FileName { get; set; }
-    
-        public PathfinderVideo(string patientID, string startTime, string endTime, string fileName) 
+        public string MediaServiceUrl { get; set; }
+
+        public PathfinderVideo(){ }
+
+        public PathfinderVideo(string patientID, string startTime, string endTime, string fileName, string mediaServiceUrl) 
         {
             this.PatientID = patientID;
             this.StartTime = startTime;
             this.EndTime = endTime;
             this.FileName = fileName;
+            this.MediaServiceUrl = mediaServiceUrl;
         }
 
         public string Save(string StorageConnectionString)
@@ -56,6 +60,12 @@ namespace Autism_Video_API.Models
             //Return the URI string for the container, including the SAS token.
             return blob.Uri + sasBlobToken;
 
+        }
+
+        public void Update(string PatientID, string StartTime, string Url, string StorageConnectionString)
+        {
+            var ve = new VideoEntity();
+            ve.Update(PatientID, StartTime, Url, StorageConnectionString);
         }
     }
 }

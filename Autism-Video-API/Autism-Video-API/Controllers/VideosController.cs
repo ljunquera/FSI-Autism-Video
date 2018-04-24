@@ -28,6 +28,13 @@ namespace Autism_Video_API.Controllers
            return video.Save(GetStorConnStr());
         }
 
+        // PUT
+        public void Put(string patientId, string startTime, string url)
+        {
+            var pv = new PathfinderVideo();
+            pv.Update(patientId, startTime, url, GetStorConnStr());
+        }
+
         private string GetStorConnStr()
         {
             return ConfigurationManager.AppSettings["StorageConnectionString"];
