@@ -211,6 +211,7 @@
     <Compile Include="Areas\HelpPage\SampleGeneration\TextSample.cs" />
     <Compile Include="Areas\HelpPage\XmlDocumentationProvider.cs" />
     <Compile Include="Controllers\DataController.cs" />
+    <Compile Include="Controllers\PathfinderEventUI.cs" />
     <Compile Include="Controllers\VideosController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
@@ -218,8 +219,10 @@
     <Compile Include="Models\EventEntity.cs" />
     <Compile Include="Models\PathfinderEvent.cs" />
     <Compile Include="Models\PathFinderEvents.cs" />
+    <Compile Include="Models\PathfinderEventUI.cs" />
     <Compile Include="Models\PathfinderVideo.cs" />
     <Compile Include="Models\PathfinderVideos.cs" />
+    <Compile Include="Models\PathfinderVideoUI.cs" />
     <Compile Include="Models\VideoEntity.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
