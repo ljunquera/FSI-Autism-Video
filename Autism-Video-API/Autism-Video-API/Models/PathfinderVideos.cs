@@ -19,9 +19,8 @@ namespace Autism_Video_API.Models
             }
         }
 
-        private void ExecuteQuery(TableQuery<VideoEntity> query)
+        private void ExecuteQuery(TableQuery<VideoEntity> query, string StorageConnectionString)
         {
-            string StorageConnectionString = "DefaultEndpointsProtocol=https;AccountName=fsiautismteam2;AccountKey=q0mp6PvwFuMY3pp5BESwHgCEFWCMDt8tZIBHL9i5N0n3XmjqrvXDI28U1W7XNGjcX3xmiuSdjO7VQHuNsv9Ofg==;TableEndpoint=https://fsiautismteam2.table.cosmosdb.azure.com:443/;";
             string TableName = "Videos";
             // Retrieve the storage account from the connection string.
             CloudStorageAccount storageAccount = CloudStorageAccount.Parse(StorageConnectionString);
@@ -43,7 +42,7 @@ namespace Autism_Video_API.Models
             }
         }
 
-        public PathfinderVideos (string PatientID, string StartTime, string EndTime)
+        public PathfinderVideos (string PatientID, string StartTime, string EndTime, string StorageConnectionString)
         {
             videos = new List<PathfinderVideo>();
             TableQuery<VideoEntity> query = new TableQuery<VideoEntity>()
@@ -58,7 +57,7 @@ namespace Autism_Video_API.Models
                     TableQuery.GenerateFilterCondition("EndTime", QueryComparisons.LessThanOrEqual, EndTime)
                 )
             );
-            ExecuteQuery(query);
+            ExecuteQuery(query, StorageConnectionString);
             //TODO: go get videos
         }
     }

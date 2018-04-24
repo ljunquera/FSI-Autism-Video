@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
@@ -15,7 +16,7 @@ namespace Autism_Video_API.Controllers
         {
             if (patientId != null && startTime != null && endTime != null)
             {
-                var pv = new PathfinderVideos(patientId, startTime, endTime);
+                var pv = new PathfinderVideos(patientId, startTime, endTime, GetStorConnStr());
                 return pv.Videos;
             }
             throw new Exception("Invalid Query Options");
@@ -24,7 +25,12 @@ namespace Autism_Video_API.Controllers
         // POST api/values
         public void Post([FromBody]PathfinderVideo video)
         {
-            video.Save();
+           video.Save(GetStorConnStr());
+        }
+
+        private string GetStorConnStr()
+        {
+            return ConfigurationManager.AppSettings["StorageConnectionString"];
         }
     }
 }
