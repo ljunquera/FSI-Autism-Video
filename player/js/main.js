@@ -95,7 +95,7 @@ function initializeVideo(videoData) {
             'text': eobg.Skill + " " + eobg.Comments
         });
     }
-    markerAry.sort();
+    // markerAry.sort();
     loadAMP(markerAry, video.URL);
     PopulateIndex();
 
@@ -188,7 +188,7 @@ $(document).ready(function functionName() {
 
     populatePatients([{
         id: "abc123",
-        name: "Dhishan"
+        name: "Drew"
     }, {
         id: "2",
         name: "Siddharth"
