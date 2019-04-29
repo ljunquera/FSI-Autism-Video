@@ -33,16 +33,45 @@
         <div class="jumbotron mx-auto">
             <h1>Video Data Collection</h1>
         </div>
-        <div class="row" id="selectPatient">
+        <div class="row" id="patient">
+          <div class="col-sm-1"></div>
+          <div class="col-sm-2">
+            <div class="dropdown">
+                <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                  Select Patient
+                </button>
+                <div class="dropdown-menu" aria-labelledby="dropdownMenuButton" id="dropdownOptions">
+                </div>
+            </div>
+          </div>
+          <div class="col-sm-5"></div>
+          <div class="col-sm-2"></div>
+          <div class="col-sm-2"></div>
+        </div>
+        <br/>
+        <br/>
+        <div class="row" id="uploadVideo">
+          <div class="col-sm-1"></div>
+          <div class="col-sm-2"></div>
+          <div class="col-sm-5">
+              <div class="form-group row">
+                  <label for="datr" class="col-4 col-form-label">Select Video:</label>
+                  <div class="col-8">
+                      <input type="file" name="filename" class="form-control" value="Choose from file" id="filename" />
+                  </div>
+              </div>
+          </div>
+          <div class="col-sm-2">
+              <button type="submit" class="btn btn-primary" onclick="UploadVideo()">Upload</button>
+          </div>
+          <div class="col-sm-2"></div>
+        </div>
+        <br/>
+        <br/>
+        <div class="row" id="getVideo">
             <div class="col-sm-1"></div>
             <div class="col-sm-2">
-                <div class="dropdown">
-                    <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                      Select Patient
-                    </button>
-                    <div class="dropdown-menu" aria-labelledby="dropdownMenuButton" id="dropdownOptions">
-                    </div>
-                </div>
+
             </div>
             <div class="col-sm-5">
                 <div class="form-group row">
@@ -56,9 +85,7 @@
                 <button type="submit" class="btn btn-primary" onclick="GetVideos()">Submit</button>
             </div>
             <div class="col-sm-2"></div>
-
         </div>
-
     </div>
     <div class="row" id="videoPlayback">
         <div class="col-sm-1"></div>
@@ -131,7 +158,11 @@
         </div>
         <div class="col-sm-5"></div>
     </div>
-
+    <div class="row" id="videoIndexerData">
+        <iframe id="videoIndexerContent" style="border:none;">
+            <div id="vicontent" name="vicontent"></div>
+        </iframe>
+    </div>
     </div>
     <script src="js/vendor/modernizr-3.5.0.min.js"></script>
     <!-- <script src="https://code.jquery.com/jquery-3.2.1.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script> -->

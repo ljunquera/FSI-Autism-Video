@@ -136,6 +136,44 @@ function GetVideos() {
             alert(errMsg);
         }
     });
+
+    $.ajax({
+        type: "GET",
+        url: "https://www.videoindexer.ai/embed/insights/a055502e-fc34-4b72-9a90-4c129bac5241/449133699d?widgets=people,search,emotions,keywords",
+        // contentType: "application/json; charset=utf-8",
+        crossdomain: true,
+        success: function(result) {
+            console.log(result);
+            $("#videoIndexerContent").contents().find("vicontent").html(result);
+        },
+        failure: function(errMsg) {
+            alert(errMsg);
+        }
+    });
+}
+
+function UploadVideo() {
+    // get patient id from global
+    var vdata = {
+        PatientID: patient.id,
+        startTime: "20190430160000",
+        endTime: "20190430161500",
+        name: document.getElementById("filename"),
+    };
+    $.ajax({
+        type: "POST",
+        url: "http://fsiautismny2.azurewebsites.net/api/Videos",
+        data: JSON.stringify(pdata),
+        contentType: "application/json; charset=utf-8",
+        dataType: "json",
+        success: function(p) {
+            console.log(p);
+            //alert("Video uploaded successfully");
+        },
+        failure: function(errMsg) {
+            alert(errMsg);
+        }
+    });
 }
 
 function getMarkpoint() {
@@ -189,9 +227,9 @@ $(document).ready(function functionName() {
     populatePatients([{
         id: "abc123",
         name: "Drew"
-    // }, {
-    //     id: "2",
-    //     name: "Siddharth"
+     }, {
+         id: "xyz123",
+         name: "Sid"
     // }, {
     //     id: "3",
     //     name: "amulya"
