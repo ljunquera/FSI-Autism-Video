@@ -137,19 +137,7 @@ function GetVideos() {
         }
     });
 
-    $.ajax({
-        type: "GET",
-        url: "https://www.videoindexer.ai/embed/insights/a055502e-fc34-4b72-9a90-4c129bac5241/449133699d?widgets=people,search,emotions,keywords",
-        // contentType: "application/json; charset=utf-8",
-        crossdomain: true,
-        success: function(result) {
-            console.log(result);
-            $("#videoIndexerContent").contents().find("vicontent").html(result);
-        },
-        failure: function(errMsg) {
-            alert(errMsg);
-        }
-    });
+    $("#videoIndexerContent").show();
 }
 
 function UploadVideo() {
@@ -223,7 +211,7 @@ $(document).ready(function functionName() {
     $('#postheader').hide();
     // $('#selectPatient').hide();
     $('input[name="daterange"]').daterangepicker();
-
+    $('#videoIndexerContent').hide();
     populatePatients([{
         id: "abc123",
         name: "Drew"
