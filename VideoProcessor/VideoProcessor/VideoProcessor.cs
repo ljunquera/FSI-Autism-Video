@@ -48,21 +48,28 @@ namespace VideoProcessor
 
                 var myVideoUploadStatus = JsonConvert.DeserializeObject<videoIndexData>(json);
 
-                //dynamic videoData = JsonConvert.DeserializeObject(json);
                 myVideoUploadStatus.state = "Processing";
                 myVideoUploadStatus.blobPath = $"/videos/{name}";
 
                 log.LogInformation($"Video Data \n Name:{name} \n Size: {myBlob.Length} Bytes\nBreakdownId:{myVideoUploadStatus.id}");
 
+                while (true)
+                {
+                    // Api call to video indexer 
+                    var videoGetIndexRequestResult = viClient.GetAsync($"{apiUrl}/{location}/Accounts/{accountId}/Videos/{myVideoUploadStatus.id}/Index?accessToken={accountAccessToken}&language=English").Result;
+                    var videoGetIndexResult = videoGetIndexRequestResult.Content.ReadAsStringAsync().Result;
+                    var state = JsonConvert.DeserializeObject<videoIndexData>(videoGetIndexResult).state;
+                    log.LogInformation($"Current Video State: {state}\n");
+
+                    if (state == "Processed")
+                    {
+                        break;
+                    }
+                    System.Threading.Thread.Sleep(10000);
+                }
+
                 //log.LogInformation($" Video Data = {myVideoUploadStatus}");
-                //document = new { Description = $"Uploaded Video with id:: {myVideoUploadStatus.id}", id = Guid.NewGuid() };
-
-                // Api call to video indexer 
-                //var videoGetIndexRequestResult = viClient.GetAsync($"{apiUrl}/{location}/Accounts/{accountId}/Videos/{videoData.id}/Index?accessToken={videoAccessToken}&language=English").Result;
-                //var videoGetIndexResult = videoGetIndexRequestResult.Content.ReadAsStringAsync().Result;
-                //dynamic videoGetIndexResultState = JsonConvert.DeserializeObject(videoGetIndexResult);
-                //log.LogInformation($"Current Video State: {videoGetIndexResultState.State}\n");
-
+                document = new { Description = $"Uploaded Video with id:: {myVideoUploadStatus.id}", id = Guid.NewGuid() };
 
             }
             catch (Exception ex)
