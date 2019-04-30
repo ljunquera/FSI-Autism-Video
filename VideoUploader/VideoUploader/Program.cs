@@ -30,7 +30,7 @@ namespace VideoUploader
             var pathfinderVideo = new PathfinderVideo(patientId, startTime.ToString("yyyyMMddHHmmss"), endTime.ToString("yyyyMMddHHmmss"), name);
 
             var response = client.PostAsJsonAsync<PathfinderVideo>(
-                "http://fsiautismny2.azurewebsites.net/api/Videos", pathfinderVideo);
+                "https://autism-video-api20190429124353.azurewebsites.net/api/Videos", pathfinderVideo);
 
             response.Result.EnsureSuccessStatusCode();
 
@@ -48,7 +48,7 @@ namespace VideoUploader
 
             //post to AMSingestion api
             var response2 = client.PostAsJsonAsync<PathfinderVideo>(
-                "http://fsiautismny2.azurewebsites.net/api/MediaService", pathfinderVideo);
+                "https://autism-video-api20190429124353.azurewebsites.net/api/MediaService", pathfinderVideo);
 
             response2.Result.EnsureSuccessStatusCode();
 
