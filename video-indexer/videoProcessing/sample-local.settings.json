@@ -1,0 +1,14 @@
+﻿{
+  {
+    "IsEncrypted": false,
+    "Values": {
+      "AzureWebJobsStorage": "UseDevelopmentStorage=true",
+      "AzureWebJobsDashboard": "UseDevelopmentStorage=true",
+      "wmvideostorage": "{video-storage-connection-string}",
+      "wm-videoindexer-key": "{video-indexer-key-vault-location}",
+      "wm-videoindexer-accountid": "{video-indexer-accountid-vault-location}",
+      "wm-cosmosdb-key": "{cosmosdb-key-key-vault-location}",
+      "wm-cosmosdb-uri": "{cosmosdb-uri-key-vault-location}",
+      "APPINSIGHTS_INSTRUMENTATIONKEY": "{application-insight-key}"
+    }
+  }
