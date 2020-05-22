@@ -11,17 +11,6 @@ namespace Autism_Video_API.Controllers
 {
     public class VideosController: ApiController
     {
-        // GET api/videos?patientId=<patientid>&startTime=<startime>&endTime=<endTime>
-        public IEnumerable<PathfinderVideo> Get(string patientId, string startTime, string endTime)
-        {
-            if (patientId != null && startTime != null && endTime != null)
-            {
-                var pv = new PathfinderVideos(patientId, startTime, endTime, GetStorConnStr());
-                return pv.Videos;
-            }
-            throw new Exception("Invalid Query Options");
-        }
-
         // GET api/videos?patientId=<patientid>
         public IEnumerable<PathfinderVideo> Get(string patientId)
         {
