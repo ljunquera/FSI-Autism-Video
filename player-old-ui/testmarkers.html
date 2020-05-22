@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Azure Media Player</title>
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!--*****START OF Azure Media Player Scripts*****-->
+        <!--Note: DO NOT USE the "latest" folder in production. Replace "latest" with a version number like "1.0.0"-->
+        <!--EX:<script src="//amp.azure.net/libs/amp/1.0.0/azuremediaplayer.min.js"></script>-->
+        <!--Azure Media Player versions can be queried from //aka.ms/ampchangelog-->
+    <link href="https://amp.azure.net/libs/amp/latest/skins/amp-default/azuremediaplayer.min.css" rel="stylesheet">
+    <script src="https://amp.azure.net/libs/amp/latest/azuremediaplayer.min.js"></script>
+        <link href="css/timelineMarkers.css" rel="stylesheet">
+    <script src="js/timelineMarkers.js"></script>
+    <!--*****END OF Azure Media Player Scripts*****-->
+
+</head>
+    <body>
+         <h1>Plugin: Timeline Markers</h1>
+
+           <video id="myplayer" class="azuremediaplayer amp-default-skin amp-big-play-centered" tabindex="0"> </video>
+         <script>
+        var myOptions = {
+            autoplay: true,
+            controls: true,
+            width: "640",
+            height: "400",
+            poster: "",
+            plugins: {
+
+                timelineMarker: {
+                    markertime: ["0:00","0:10", "0:48"]
+
+                }
+
+            }
+        };
+        var myPlayer = amp("myplayer", myOptions);
+        Testfile = "https://scenario2storage.blob.core.windows.net/asset-7a3e5529-b2ec-4bc2-816e-bfe7e7942cad/Movie on 4-23-18 at 12.36 PM_540x360_AACAudio_1000.mp4?sv=2015-07-08&sr=c&si=5fc7a7c0-209e-4408-bf21-f3401e7b0f0b&sig=7OAt%2F5DX6iTYGJ1hLSoWgkutBY%2FiQu0z16sd3Ih75YA%3D&st=2018-04-23T18%3A28%3A52Z&se=2118-04-23T18%3A28%3A52Z";
+        // "//amssamples.streaming.mediaservices.windows.net/91492735-c523-432b-ba01-faba6c2206a2/AzureMediaServicesPromo.ism/manifest", type: "application/vnd.ms-sstr+xml" }, ]);
+        myPlayer.src([{ src: Testfile }, ]);
+    </script>
+         </body>
+</html>
