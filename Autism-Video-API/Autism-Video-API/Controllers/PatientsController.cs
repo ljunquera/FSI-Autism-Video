@@ -1,4 +1,4 @@
-using System;
+using System.Linq;
 using System.Collections.Generic;
 using System.Configuration;
 using System.Web.Http;
@@ -6,17 +6,13 @@ using Autism_Video_API.Models;
 
 namespace Autism_Video_API.Controllers
 {
-    public class PatientController : ApiController
+    public class PatientsController : ApiController
     {
         // GET api/Patient/<PatientID>
-        public IEnumerable<PathfinderVideo> Get(string patientId)
+        public IEnumerable<string> Get()
         {
-            if (patientId != null)
-            {
-                var pv = new PathfinderVideos(patientId, GetStorConnStr());
-                return pv.Videos;
-            }
-            throw new Exception("Invalid Query Options");
+            var pv = new PathfinderVideos(GetStorConnStr());
+            return pv.Videos.Select(x => x.PatientID).Distinct();
         }
 
         private string GetStorConnStr()
