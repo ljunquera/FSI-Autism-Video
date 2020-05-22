@@ -59,6 +59,7 @@ function postData() {
         Result: $('#result').val(),
         Comments: $('#comments').val()
     };
+    
     $.ajax({
         type: "POST",
         url: "https://fsiautismny2.azurewebsites.net/api/Data",
