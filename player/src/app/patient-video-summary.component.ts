@@ -22,7 +22,6 @@ export class PatientVideoSummaryComponent {
         autoplay: false,
         controls: false,
         muted: false,
-        width: "200",
         height: "150",
         poster: ""
     };

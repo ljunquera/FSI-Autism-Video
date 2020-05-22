@@ -48,7 +48,6 @@ export class AppComponent {
     autoplay: true,
     controls: true,
     muted: false,
-    width: "650",
     height: "470",
     poster: ""
   };
