@@ -2,8 +2,4 @@
 echo changing directory...
 cd %DEPLOYMENT_SOURCE%\player
 echo installing packages...
-npm install
-echo building project...
-npm run build
-echo deploying files
-xcopy %DEPLOYMENT_SOURCE%\dist\player %DEPLOYMENT_TARGET% /Y
+npm install && npm run build && xcopy %DEPLOYMENT_SOURCE%\dist\player %DEPLOYMENT_TARGET% /Y /s /i
