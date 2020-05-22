@@ -19,17 +19,28 @@ export class AppComponent {
   @ViewChild("videoPlayer") videoPlayer: ElementRef;
   @ViewChildren(PatientVideoSummaryComponent) currPatientVideos: QueryList<PatientVideoSummaryComponent>;
 
+  private markerApi: string = "https://fsiautismny2.azurewebsites.net/api/Marker";
+  private eventApi: string = "https://fsiautismny2.azurewebsites.net/api/Data";
+
+  public infoType: string = "";
+
   public selectedPatient: string;
   public markerSkill: string;
   public markerTarget: string;
   public markerResult: string;
   public markerComments: string;
+  public markerTags: string;
+
   public isAddingMarker: boolean = false;
 
   public title = 'player';
   public patientDetails: PatientDetails[];
   public selectedPatientVideos: any;
   public selectedPtntIndx: number = -1;
+  public selectedMarkerIndx: number = -1;
+  public selectedVideUrl: string;
+
+  public availableMarkers: any = [];
 
   public options = {
     techOrder: ["azureHtml5JS", "flashSS", "html5FairPlayHLS", "silverlightSS", "html5"],
@@ -37,7 +48,7 @@ export class AppComponent {
     autoplay: true,
     controls: true,
     muted: false,
-    width: "700",
+    width: "650",
     height: "470",
     poster: ""
   };
@@ -61,6 +72,13 @@ export class AppComponent {
   addMarkerToVideo(ev) {
     this.videoPlayerInstance.pause();
     this.isAddingMarker = true;
+    this.infoType = "marker";
+  }
+
+  addEventToVideo(ev) {
+    this.videoPlayerInstance.pause();
+    this.isAddingMarker = true;
+    this.infoType = "event";
   }
 
   getAllPatients() {
@@ -80,26 +98,43 @@ export class AppComponent {
   }
 
   onPatientVideoSelected(info) {
+    this.selectedVideUrl = info.url;
     this.videoPlayerInstance.src([{
       src: info.url,
       type: "application/vnd.ms-sstr+xml"
     }]);
+    this.getAllMarkersForVideo(info.url);
   }
 
   storeMarker(ev) {
 
     let timestamp = this.videoPlayerInstance.currentTime();
 
-    var pdata = {
-      PatientID: this.selectedPatient,
-      TimeStamp: timestamp,
-      Skill: this.markerSkill,
-      Target: this.markerTarget,
-      Result: this.markerResult,
-      Comments: this.markerComments
-    };
+    let pData = null;
 
-    this.http.post("https://fsiautismny2.azurewebsites.net/api/Data", pdata, {
+    if (this.infoType === "marker") {
+      pData = {
+        PatientID: this.selectedPatient,
+        RowKey: new Date().getTime(),
+        MarkerTime: timestamp,
+        Tag: this.markerTags,
+        FileName: this.selectedVideUrl
+      };
+    }
+    else {
+      pData = {
+        PatientID: this.selectedPatient,
+        TimeStamp: timestamp,
+        Skill: this.markerSkill,
+        Target: this.markerTarget,
+        Result: this.markerResult,
+        Comments: this.markerComments
+      };
+    }
+
+    let url = this.infoType === "marker" ? this.markerApi : this.eventApi;
+
+    this.http.post(url, pData, {
       headers: {
         "Content-Type": "application/json"
       },
@@ -108,6 +143,22 @@ export class AppComponent {
       .subscribe(res => {
         console.log(res);
         this.isAddingMarker = false;
+        if(this.infoType === "marker") {
+          this.getAllMarkersForVideo(this.selectedVideUrl);
+        }
       });
+  }
+
+  getAllMarkersForVideo(videoUrl) {
+    this.http.get(`${this.markerApi}?patientId=${this.selectedPatient}&fileName=${videoUrl}`, { responseType: "json", observe: "body" })
+      .subscribe(res => {
+        this.availableMarkers = res;
+      });
+  }
+
+  seekToCurrentMarker(marker, idx) {
+    this.selectedMarkerIndx = idx;
+    this.videoPlayerInstance.currentTime(parseFloat(marker.MarkerTime));
+    this.videoPlayerInstance.pause();
   }
 }

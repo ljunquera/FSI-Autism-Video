@@ -22,7 +22,7 @@ export class PatientVideoSummaryComponent {
         autoplay: false,
         controls: false,
         muted: false,
-        width: "300",
+        width: "200",
         height: "150",
         poster: ""
     };

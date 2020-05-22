@@ -107,14 +107,14 @@
       </ul>
     </div>
 
-    <div class="col-md-3">
+    <div class="col-md-2">
       <ng-template ngFor let-videoinfo [ngForOf]="selectedPatientVideos" let-i="index">
         <patient-video-summary [patientVideoDetails]="videoinfo" (onVideoClicked)="onPatientVideoSelected($event)">
         </patient-video-summary>
       </ng-template>
     </div>
 
-    <div class="col-md-7">
+    <div class="col-md-6">
       <div class="row">
         <div class="col-md-12">
           <video #videoPlayer id="vid1" class="azuremediaplayer amp-default-skin">
@@ -124,13 +124,22 @@
             </p>
           </video>
         </div>
-        <div class="col-md-12" style="padding-top: 20px;" [style.width]="options.width + 'px'" [style.max-width]="options.width + 'px'">
+        <div class="col-md-12" style="padding-top: 20px;" [style.width]="options.width + 'px'"
+          [style.max-width]="options.width + 'px'">
           <div class="row">
             <div class="col-md-3">
-              <button type="button" class="btn btn-primary" (click)="addMarkerToVideo($event)">Add Marker</button>
+              <div class="row">
+                <div class="col-md-12">
+                  <button type="button" class="btn btn-primary" (click)="addMarkerToVideo($event)">Add Marker</button>
+                </div>
+                <div class="col-md-12" style="padding-top: 20px;">
+                  <button type="button" class="btn btn-primary" (click)="addEventToVideo($event)">Add Event</button>
+                </div>
+              </div>
             </div>
             <div class="col-md-9">
-              <form>
+
+              <form *ngIf="infoType === 'event'">
                 <div class="form-group row">
                   <label class="col-sm-2 col-form-label" for="patientId">Patient ID</label>
                   <div class="col-sm-10">
@@ -166,13 +175,44 @@
                       [attr.disabled]="!isAddingMarker ? 'disabled' : null" [ngModelOptions]="{standalone: true}">
                   </div>
                 </div>
-                <button type="submit" class="btn btn-primary" (click)="storeMarker($event)"
+                <button type="submit" class="btn btn-primary float-right" (click)="storeMarker($event)"
                   [attr.disabled]="!isAddingMarker ? 'disabled' : null">Submit</button>
               </form>
+
+              <form *ngIf="infoType === 'marker'">
+                <div class="form-group row">
+                  <label class="col-sm-2 col-form-label" for="patientId">Patient ID</label>
+                  <div class="col-sm-10">
+                    <input type="text" class="form-control" id="patientId" [(ngModel)]="selectedPatient"
+                      [ngModelOptions]="{standalone: true}" readonly>
+                  </div>
+                </div>
+                <div class="form-group row">
+                  <label class="col-sm-2 col-form-label" for="markerTags">Tags</label>
+                  <div class="col-sm-10">
+                    <input type="text" class="form-control" id="markerTags" [(ngModel)]="markerTags"
+                      [attr.disabled]="!isAddingMarker ? 'disabled' : null" [ngModelOptions]="{standalone: true}">
+                  </div>
+                </div>
+                <button type="submit" class="btn btn-primary float-right" (click)="storeMarker($event)"
+                  [attr.disabled]="!isAddingMarker ? 'disabled' : null">Submit</button>
+              </form>
+
             </div>
           </div>
         </div>
       </div>
+    </div>
+
+    <div class="col-md-2">
+      <ul class="list-group">
+        <ng-template ngFor let-marker [ngForOf]="availableMarkers" let-idx="index">
+          <a href="#" class="list-group-item list-group-item-action"
+            [ngClass]="{'active': selectedMarkerIndx === idx ? true : false}" (click)="seekToCurrentMarker(marker, idx)">
+            {{marker.Tag}} ({{marker.MarkerTime}}s)
+          </a>
+        </ng-template>
+      </ul>
     </div>
 
     <svg id="clouds" alt="Gray Clouds Background" xmlns="http://www.w3.org/2000/svg" width="2611.084" height="485.677"
