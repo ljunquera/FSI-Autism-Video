@@ -3,7 +3,15 @@ Repo for FSI Austim Hackathon
 
 ## Azure Development Environment Setup
 
-This section provides instructions for building the Azure components you will need to run the application and the various services within it.  It relies on PowerShell on Windows (untested on Linux) and you must have the [Azure CLI](https://docs.microsoft.com/en-us/cli/azure/install-azure-cli?view=azure-cli-latest) installed.
+This section provides instructions for building the Azure components you will need to run the application and the various services within it. 
+
+### Prerequisites
+
+It relies on PowerShell on Windows (untested on Linux) and you must have the [Azure CLI](https://docs.microsoft.com/en-us/cli/azure/install-azure-cli?view=azure-cli-latest) installed.  You must also log in via Azure CLI before running the scripts:
+
+    az login --allow-no-subscriptions
+
+### Spinning up the Infra
 
 The Azure environment can be built or torn down with the `New-AzureEnvironment.ps1` and `Remove-AzureEnvironment.ps1`.
 
@@ -15,17 +23,24 @@ For full help, you may run `Get-Help` against either script:
 
 The scripts will return output in JSON format that contains the relevant endpoints and service names you will need to use while developing or deploying the application.
 
-If you are leveraging a new service that is not yet in the project, you must add it to the `New-AzureEnvironment.ps1` file.  The following snippet illustrates what each component does:
+### Adding a new Azure service to the project
+If you are leveraging a new service that is not yet in the project, you must add it to the `New-AzureEnvironment.ps1` file.  The following illustrates what each component does:
 
-	# Verbose message explaining what is happening
+#### Verbose message explaining what is happening
+
 	Write-Verbose "Creating CosmoDB Account"
-	# Capture the output from an Azure CLI command using $fsiautism$resourcegroup for names that must be unique across all of Azure
-	# The select statement grabs the output that you want the end user to have - typically this is just what they need to use the service.
+	
+#### Execute az command and provide output relevant to project configuration
+The following executes an Azure CLI command.  You should use $resourcegroup, $location, or $subscription as global script variables as needed.
+
+Where the name must be unique across all of Azure, we are using fsiautism$resourcegroup as the name.
+
+Finally, the select statement at the end selects the return properties that someone might need to consume the service.  The script ulitmately creates JSON output that could be used later in a deploy script.
+
 	$output = Invoke-AzureCLI "az cosmosdb create --resource-group $resourcegroup --name fsiautism$resourcegroup" |
 		select name, type, documentEndpoint
-	# Add the selected output to $returns which contains the output of the script that is rendered as JSON at the end
-	$returns |add-member -NotePropertyName CosmosDBAccount -NotePropertyValue $output
 
-## TODO 
-  * Create deploy scripts to deploy services to the environment using the output of New-AzureEnvironment
-  * Consider how to use output of New-AzureEnvironment to allow developers to tweak config settings automatically for their dev environment
+#### Add the output to the return object
+Each notepropertyname gets converted into a root hash element that has your config.  This name must be unique to any others already used in this script:
+
+	$returns |add-member -NotePropertyName CosmosDBAccount -NotePropertyValue $output
