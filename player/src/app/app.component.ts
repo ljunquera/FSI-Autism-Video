@@ -28,9 +28,8 @@ export class AppComponent {
   ngAfterViewInit() {
     this.videoPlayerInstance = amp(this.videoPlayer.nativeElement, this.options, () => {
       console.log('Good to go!');
-      let _this: any = this;
       // add an event listener
-      _this.addEventListener('ended', () => {
+      this.videoPlayerInstance.addEventListener('ended', () => {
         console.log('Finished!');
       });
     });
@@ -51,5 +50,6 @@ export class AppComponent {
 
   pauseVideo(ev) {
     this.videoPlayerInstance.pause();
+    console.log(this.videoPlayerInstance.currentTime());
   }
 }
