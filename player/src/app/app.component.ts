@@ -1,6 +1,13 @@
-import { Component, ViewChild, ElementRef } from '@angular/core';
+import { Component, ViewChild, ElementRef, ViewChildren, QueryList } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import { PatientVideoSummaryComponent } from "./patient-video-summary.component";
 
 declare const amp;
+
+interface PatientDetails {
+  patientName: string;
+  patientId: string;
+};
 
 @Component({
   selector: 'app-root',
@@ -10,14 +17,25 @@ declare const amp;
 export class AppComponent {
 
   @ViewChild("videoPlayer") videoPlayer: ElementRef;
+  @ViewChildren(PatientVideoSummaryComponent) currPatientVideos: QueryList<PatientVideoSummaryComponent>;
 
-  title = 'player';
+  public selectedPatient: string;
+  public markerSkill: string;
+  public markerTarget: string;
+  public markerResult: string;
+  public markerComments: string;
+  public isAddingMarker: boolean = false;
+
+  public title = 'player';
+  public patientDetails: PatientDetails[];
+  public selectedPatientVideos: any;
 
   private options = {
     techOrder: ["azureHtml5JS", "flashSS", "html5FairPlayHLS", "silverlightSS", "html5"],
     "nativeControlsForTouch": false,
-    autoplay: false,
+    autoplay: true,
     controls: true,
+    muted: false,
     width: "640",
     height: "400",
     poster: ""
@@ -25,31 +43,69 @@ export class AppComponent {
 
   private videoPlayerInstance: any;
 
+  constructor(private http: HttpClient) { }
+
+  ngOnInit() {
+    this.getAllPatients();
+  }
+
   ngAfterViewInit() {
     this.videoPlayerInstance = amp(this.videoPlayer.nativeElement, this.options, () => {
-      console.log('Good to go!');
-      // add an event listener
-      this.videoPlayerInstance.addEventListener('ended', () => {
-        console.log('Finished!');
-      });
+      // this.videoPlayerInstance.addEventListener('sourceset', () => {
+      //   console.log("source set!!");
+      // });
     });
-
-    this.videoPlayerInstance.src([{
-      src: "https://autismhackathoncase2-usea.streaming.media.azure.net/a9ce346f-43d3-4602-8e7a-3cbb7950ffc1/ignite.ism/manifest",
-      type: "application/vnd.ms-sstr+xml"
-    }]);    
   }
 
-  seekVideo(ev) {
-    this.videoPlayerInstance.currentTime(60);
-  }
-
-  playVideo(ev) {
-    this.videoPlayerInstance.play();
-  }
-
-  pauseVideo(ev) {
+  addMarkerToVideo(ev) {
     this.videoPlayerInstance.pause();
-    console.log(this.videoPlayerInstance.currentTime());
+    this.isAddingMarker = true;
+  }
+
+  getAllPatients() {
+    this.http.get<PatientDetails[]>("https://fsiautismny2.azurewebsites.net/api/patients", { responseType: "json", observe: "body" })
+      .subscribe(res => {
+        this.patientDetails = res;
+      });
+  }
+
+  getPatientVideos(id) {
+    this.selectedPatient = id;
+    this.http.get(`https://fsiautismny2.azurewebsites.net/api/Videos?patientId=${id}`, { responseType: "json", observe: "body" })
+      .subscribe(res => {
+        this.selectedPatientVideos = res;
+      });
+  }
+
+  onPatientVideoSelected(info) {
+    this.videoPlayerInstance.src([{
+      src: info.url,
+      type: "application/vnd.ms-sstr+xml"
+    }]);
+  }
+
+  storeMarker(ev) {
+
+    let timestamp = this.videoPlayerInstance.currentTime();
+
+    var pdata = {
+      PatientID: this.selectedPatient,
+      TimeStamp: timestamp,
+      Skill: this.markerSkill,
+      Target: this.markerTarget,
+      Result: this.markerResult,
+      Comments: this.markerComments
+    };
+
+    this.http.post("https://fsiautismny2.azurewebsites.net/api/Data", pdata, {
+      headers: {
+        "Content-Type": "application/json"
+      },
+      observe: "response"
+    })
+      .subscribe(res => {
+        console.log(res);
+        this.isAddingMarker = false;
+      });
   }
 }
