@@ -29,15 +29,16 @@ export class AppComponent {
   public title = 'player';
   public patientDetails: PatientDetails[];
   public selectedPatientVideos: any;
+  public selectedPtntIndx: number = -1;
 
-  private options = {
+  public options = {
     techOrder: ["azureHtml5JS", "flashSS", "html5FairPlayHLS", "silverlightSS", "html5"],
     "nativeControlsForTouch": false,
     autoplay: true,
     controls: true,
     muted: false,
-    width: "640",
-    height: "400",
+    width: "700",
+    height: "470",
     poster: ""
   };
 
@@ -69,8 +70,9 @@ export class AppComponent {
       });
   }
 
-  getPatientVideos(id) {
+  getPatientVideos(id, idx) {
     this.selectedPatient = id;
+    this.selectedPtntIndx = idx;
     this.http.get(`https://fsiautismny2.azurewebsites.net/api/Videos?patientId=${id}`, { responseType: "json", observe: "body" })
       .subscribe(res => {
         this.selectedPatientVideos = res;

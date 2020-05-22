@@ -4,7 +4,8 @@ declare const amp;
 
 @Component({
     selector: 'patient-video-summary',
-    templateUrl: './patient-video-summary.component.html'
+    templateUrl: './patient-video-summary.component.html',
+    styleUrls: ['./patient-video-summary.component.less']
 })
 export class PatientVideoSummaryComponent {
 
@@ -21,8 +22,8 @@ export class PatientVideoSummaryComponent {
         autoplay: false,
         controls: false,
         muted: false,
-        width: "200",
-        height: "100",
+        width: "300",
+        height: "150",
         poster: ""
     };
 
