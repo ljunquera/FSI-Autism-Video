@@ -60,5 +60,14 @@ namespace Autism_Video_API.Models
             ExecuteQuery(query, StorageConnectionString);
             //TODO: go get videos
         }
+
+        public PathfinderVideos(string PatientID, string StorageConnectionString)
+        {
+            videos = new List<PathfinderVideo>();
+            TableQuery<VideoEntity> query = new TableQuery<VideoEntity>()
+                                            .Where(TableQuery.GenerateFilterCondition("PartitionKey", QueryComparisons.Equal, PatientID));
+            ExecuteQuery(query, StorageConnectionString);
+            //TODO: go get videos
+        }
     }
 }
