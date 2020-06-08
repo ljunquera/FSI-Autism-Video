@@ -38,6 +38,10 @@ namespace Autism_Video_API.Models
             var data = table.ExecuteQuery<VideoEntity>(query);
             foreach (var d in data)
             {
+                if (string.IsNullOrEmpty(d.PartitionKey))
+                { 
+                    continue; 
+                }
                 videos.Add(new PathfinderVideo(d.PartitionKey, d.RowKey, d.EndTime, d.FileName, d.MediaServiceUrl));
             }
         }
@@ -57,6 +61,22 @@ namespace Autism_Video_API.Models
                     TableQuery.GenerateFilterCondition("EndTime", QueryComparisons.LessThanOrEqual, EndTime)
                 )
             );
+            ExecuteQuery(query, StorageConnectionString);
+            //TODO: go get videos
+        }
+
+        public PathfinderVideos(string PatientID, string StorageConnectionString)
+        {
+            videos = new List<PathfinderVideo>();
+            TableQuery<VideoEntity> query = new TableQuery<VideoEntity>()
+                                            .Where(TableQuery.GenerateFilterCondition("PartitionKey", QueryComparisons.Equal, PatientID));
+            ExecuteQuery(query, StorageConnectionString);
+            //TODO: go get videos
+        }
+        public PathfinderVideos(string StorageConnectionString)
+        {
+            videos = new List<PathfinderVideo>();
+            TableQuery<VideoEntity> query = new TableQuery<VideoEntity>();
             ExecuteQuery(query, StorageConnectionString);
             //TODO: go get videos
         }

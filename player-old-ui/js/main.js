@@ -59,9 +59,10 @@ function postData() {
         Result: $('#result').val(),
         Comments: $('#comments').val()
     };
+    
     $.ajax({
         type: "POST",
-        url: "http://fsiautismny2.azurewebsites.net/api/Data",
+        url: "https://fsiautismny2.azurewebsites.net/api/Data",
         data: JSON.stringify(pdata),
         contentType: "application/json; charset=utf-8",
         dataType: "json",
@@ -117,10 +118,10 @@ function GetVideos() {
     var dates = $('#datr').val().split("-");
     var startDate = moment(new Date(dates[0].trim())).format("YYYYMMDD") + "000000";
     var endDate = moment(new Date(dates[1].trim())).format("YYYYMMDD") + "000000";
-    // http://fsiautismny2.azurewebsites.net/api/VideosWithData?patientId=abc123&startTime=20180423000000&endTime=20180424000000
+    // https://fsiautismny2.azurewebsites.net/api/VideosWithData?patientId=Ptn001&startTime=20200520000000&endTime=20200520000000
     $.ajax({
         type: "GET",
-        url: "http://fsiautismny2.azurewebsites.net/api/VideosWithData",
+        url: "https://fsiautismny2.azurewebsites.net/api/VideosWithData",
         data: {
             "patientId": patient.id,
             "startTime": startDate,
@@ -187,14 +188,14 @@ $(document).ready(function functionName() {
     $('input[name="daterange"]').daterangepicker();
 
     populatePatients([{
-        id: "abc123",
-        name: "Drew"
+        id: "Ptn001",
+        name: "Ptn001"
     }, {
-        id: "2",
-        name: "Siddharth"
+        id: "Ptn002",
+        name: "Ptn002"
     }, {
-        id: "3",
-        name: "amulya"
+        id: "Ptn003",
+        name: "Ptn003"
     }, {
         id: "4",
         name: "Lambert"

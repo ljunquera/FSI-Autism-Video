@@ -228,15 +228,20 @@
     <Compile Include="Areas\HelpPage\XmlDocumentationProvider.cs" />
     <Compile Include="Controllers\DataController.cs" />
     <Compile Include="Controllers\MediaServiceController.cs" />
+    <Compile Include="Controllers\PatientsController.cs" />
+    <Compile Include="Controllers\MarkerController.cs" />
     <Compile Include="Controllers\VideosController.cs" />
     <Compile Include="Controllers\VideosWithDataController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Models\EventEntity.cs" />
+    <Compile Include="Models\MarkerEntity.cs" />
     <Compile Include="Models\PathfinderEvent.cs" />
     <Compile Include="Models\PathFinderEvents.cs" />
     <Compile Include="Models\PathfinderEventUI.cs" />
+    <Compile Include="Models\PathfinderMarker.cs" />
+    <Compile Include="Models\PathfinderMarkers.cs" />
     <Compile Include="Models\PathfinderVideo.cs" />
     <Compile Include="Models\PathfinderVideos.cs" />
     <Compile Include="Models\PathfinderVideoUI.cs" />
